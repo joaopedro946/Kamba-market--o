@@ -1,0 +1,163 @@
+<!DOCTYPE html>
+<html lang="pt">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Kamba Market</title>
+  <style>
+    body {
+      margin: 0;
+      font-family: Arial, sans-serif;
+      background: #f5f5f5;
+    }
+
+    header {
+      background: #087f3e;
+      color: white;
+      text-align: center;
+      padding: 25px;
+    }
+
+    header h1 {
+      margin: 0;
+      font-size: 32px;
+    }
+
+    .container {
+      max-width: 1000px;
+      margin: auto;
+      padding: 20px;
+    }
+
+    .search {
+      width: 100%;
+      padding: 15px;
+      box-sizing: border-box;
+      border: 1px solid #ddd;
+      border-radius: 8px;
+      font-size: 16px;
+      margin-bottom: 20px;
+    }
+
+    .products {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 20px;
+    }
+
+    .product {
+      background: white;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .product h2 {
+      color: #087f3e;
+    }
+
+    .price {
+      font-size: 20px;
+      font-weight: bold;
+      margin: 15px 0;
+    }
+
+    button {
+      width: 100%;
+      padding: 12px;
+      border: 0;
+      border-radius: 7px;
+      background: #087f3e;
+      color: white;
+      font-size: 16px;
+    }
+
+    footer {
+      margin-top: 40px;
+      padding: 20px;
+      text-align: center;
+      background: #222;
+      color: white;
+    }
+  </style>
+</head>
+
+<body>
+
+<header>
+  <h1>Kamba Market</h1>
+  <p>O teu mercado online</p>
+</header>
+
+<div class="container">
+
+  <input
+    id="pesquisa"
+    class="search"
+    type="text"
+    placeholder="Pesquisar produtos..."
+    onkeyup="pesquisar()"
+  >
+
+  <div class="products">
+
+    <div class="product">
+      <h2>Telemóvel</h2>
+      <p>Smartphones de qualidade.</p>
+      <div class="price">150.000 Kz</div>
+      <button onclick="comprar('Telemóvel')">Comprar</button>
+    </div>
+
+    <div class="product">
+      <h2>Roupa</h2>
+      <p>Roupas modernas para todos.</p>
+      <div class="price">25.000 Kz</div>
+      <button onclick="comprar('Roupa')">Comprar</button>
+    </div>
+
+    <div class="product">
+      <h2>Calçado</h2>
+      <p>Calçados de qualidade.</p>
+      <div class="price">35.000 Kz</div>
+      <button onclick="comprar('Calçado')">Comprar</button>
+    </div>
+
+    <div class="product">
+      <h2>Computador</h2>
+      <p>Computadores para estudo e trabalho.</p>
+      <div class="price">250.000 Kz</div>
+      <button onclick="comprar('Computador')">Comprar</button>
+    </div>
+
+  </div>
+</div>
+
+<footer>
+  <p>© 2026 Kamba Market</p>
+  <p>Comprar e vender de forma simples.</p>
+</footer>
+
+<script>
+function comprar(produto) {
+  alert("Você selecionou: " + produto);
+}
+
+function pesquisar() {
+  const texto = document
+    .getElementById("pesquisa")
+    .value
+    .toLowerCase();
+
+  const produtos = document.querySelectorAll(".product");
+
+  produtos.forEach(function(produto) {
+    produto.style.display =
+      produto.innerText.toLowerCase().includes(texto)
+      ? "block"
+      : "none";
+  });
+}
+</script>
+
+</body>
+</html>
