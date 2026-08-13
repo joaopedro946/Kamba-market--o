@@ -4,6 +4,7 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Kamba Market</title>
+
   <style>
     body {
       margin: 0;
@@ -15,12 +16,23 @@
       background: #087f3e;
       color: white;
       text-align: center;
-      padding: 25px;
+      padding: 22px;
     }
 
     header h1 {
       margin: 0;
       font-size: 32px;
+    }
+
+    .cart-button {
+      margin-top: 10px;
+      background: white;
+      color: #087f3e;
+      padding: 10px 18px;
+      border-radius: 8px;
+      border: none;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     .container {
@@ -62,7 +74,7 @@
       margin: 15px 0;
     }
 
-    button {
+    .buy {
       width: 100%;
       padding: 12px;
       border: 0;
@@ -70,6 +82,44 @@
       background: #087f3e;
       color: white;
       font-size: 16px;
+      cursor: pointer;
+    }
+
+    .cart {
+      background: white;
+      margin-top: 30px;
+      padding: 20px;
+      border-radius: 10px;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
+    }
+
+    .cart-item {
+      display: flex;
+      justify-content: space-between;
+      border-bottom: 1px solid #ddd;
+      padding: 12px 0;
+    }
+
+    .remove {
+      background: #d62828;
+      color: white;
+      border: none;
+      padding: 6px 10px;
+      border-radius: 5px;
+      cursor: pointer;
+    }
+
+    .checkout {
+      width: 100%;
+      padding: 14px;
+      margin-top: 15px;
+      background: #25D366;
+      color: white;
+      border: none;
+      border-radius: 7px;
+      font-size: 17px;
+      font-weight: bold;
+      cursor: pointer;
     }
 
     footer {
@@ -85,8 +135,12 @@
 <body>
 
 <header>
-  <h1>Kamba Market</h1>
+  <h1>🛍️ Kamba Market</h1>
   <p>O teu mercado online</p>
+
+  <button class="cart-button" onclick="mostrarCarrinho()">
+    🛒 Carrinho (<span id="quantidade">0</span>)
+  </button>
 </header>
 
 <div class="container">
@@ -102,34 +156,55 @@
   <div class="products">
 
     <div class="product">
-      <h2>Telemóvel</h2>
+      <h2>📱 Telemóvel</h2>
       <p>Smartphones de qualidade.</p>
       <div class="price">150.000 Kz</div>
-      <button onclick="comprar('Telemóvel')">Comprar</button>
+      <button class="buy" onclick="adicionar('Telemóvel', 150000)">
+        Adicionar ao carrinho
+      </button>
     </div>
 
     <div class="product">
-      <h2>Roupa</h2>
+      <h2>👕 Roupa</h2>
       <p>Roupas modernas para todos.</p>
       <div class="price">25.000 Kz</div>
-      <button onclick="comprar('Roupa')">Comprar</button>
+      <button class="buy" onclick="adicionar('Roupa', 25000)">
+        Adicionar ao carrinho
+      </button>
     </div>
 
     <div class="product">
-      <h2>Calçado</h2>
+      <h2>👟 Calçado</h2>
       <p>Calçados de qualidade.</p>
       <div class="price">35.000 Kz</div>
-      <button onclick="comprar('Calçado')">Comprar</button>
+      <button class="buy" onclick="adicionar('Calçado', 35000)">
+        Adicionar ao carrinho
+      </button>
     </div>
 
     <div class="product">
-      <h2>Computador</h2>
+      <h2>💻 Computador</h2>
       <p>Computadores para estudo e trabalho.</p>
       <div class="price">250.000 Kz</div>
-      <button onclick="comprar('Computador')">Comprar</button>
+      <button class="buy" onclick="adicionar('Computador', 250000)">
+        Adicionar ao carrinho
+      </button>
     </div>
 
   </div>
+
+  <div id="carrinho" class="cart" style="display:none;">
+    <h2>🛒 Meu Carrinho</h2>
+
+    <div id="lista"></div>
+
+    <h3>Total: <span id="total">0</span> Kz</h3>
+
+    <button class="checkout" onclick="finalizarCompra()">
+      Finalizar pedido pelo WhatsApp
+    </button>
+  </div>
+
 </div>
 
 <footer>
@@ -138,11 +213,69 @@
 </footer>
 
 <script>
-function comprar(produto) {
-  alert("Você selecionou: " + produto);
+let carrinho = [];
+
+function adicionar(nome, preco) {
+  carrinho.push({
+    nome: nome,
+    preco: preco
+  });
+
+  atualizarCarrinho();
+
+  alert(nome + " foi adicionado ao carrinho!");
+}
+
+function atualizarCarrinho() {
+
+  document.getElementById("quantidade").innerText = carrinho.length;
+
+  let lista = document.getElementById("lista");
+  let total = 0;
+
+  lista.innerHTML = "";
+
+  carrinho.forEach(function(item, index) {
+
+    total += item.preco;
+
+    lista.innerHTML += `
+      <div class="cart-item">
+        <span>
+          ${item.nome} - ${item.preco.toLocaleString("pt-AO")} Kz
+        </span>
+
+        <button class="remove" onclick="remover(${index})">
+          Remover
+        </button>
+      </div>
+    `;
+  });
+
+  document.getElementById("total").innerText =
+    total.toLocaleString("pt-AO");
+}
+
+function remover(index) {
+  carrinho.splice(index, 1);
+  atualizarCarrinho();
+}
+
+function mostrarCarrinho() {
+
+  const carrinhoDiv = document.getElementById("carrinho");
+
+  if (carrinhoDiv.style.display === "none") {
+    carrinhoDiv.style.display = "block";
+  } else {
+    carrinhoDiv.style.display = "none";
+  }
+
+  atualizarCarrinho();
 }
 
 function pesquisar() {
+
   const texto = document
     .getElementById("pesquisa")
     .value
@@ -151,11 +284,53 @@ function pesquisar() {
   const produtos = document.querySelectorAll(".product");
 
   produtos.forEach(function(produto) {
+
     produto.style.display =
       produto.innerText.toLowerCase().includes(texto)
       ? "block"
       : "none";
+
   });
+}
+
+function finalizarCompra() {
+
+  if (carrinho.length === 0) {
+    alert("O carrinho está vazio.");
+    return;
+  }
+
+  let mensagem = "Olá, Kamba Market! Gostaria de fazer este pedido:%0A%0A";
+
+  let total = 0;
+
+  carrinho.forEach(function(item) {
+
+    mensagem +=
+      "- " + item.nome + ": " +
+      item.preco.toLocaleString("pt-AO") +
+      " Kz%0A";
+
+    total += item.preco;
+  });
+
+  mensagem +=
+    "%0ATotal: " +
+    total.toLocaleString("pt-AO") +
+    " Kz";
+
+  /*
+   * IMPORTANTE:
+   * Substitua 244900000000 pelo número de WhatsApp
+   * que será usado pela Kamba Market.
+   */
+
+  const numero = "244900000000";
+
+  window.open(
+    "https://wa.me/" + numero + "?text=" + mensagem,
+    "_blank"
+  );
 }
 </script>
 
