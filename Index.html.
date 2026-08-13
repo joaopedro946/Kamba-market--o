@@ -514,3 +514,271 @@ function anunciar() {
 
 </body>
 </html>
+Substitui o teu "index.html" pelo código que te vou preparar. Mantém os teus dados do Supabase apenas nestas duas linhas:
+
+const SUPABASE_URL = "COLOCA_AQUI_O_PROJECT_URL";
+const SUPABASE_KEY = "COLOCA_AQUI_A_PUBLISHABLE_KEY";
+
+No teu código atual, a parte final do "<script>" deve ser substituída por esta:
+
+<script>
+
+const SUPABASE_URL = "COLOCA_AQUI_O_PROJECT_URL";
+const SUPABASE_KEY = "COLOCA_AQUI_A_PUBLISHABLE_KEY";
+
+let categoriaAtual = "Todos";
+
+function pesquisar() {
+  const texto = document.getElementById("search").value.toLowerCase();
+  const produtos = document.querySelectorAll(".product");
+  let encontrados = 0;
+
+  produtos.forEach(function(produto) {
+    const nome = produto.getAttribute("data-name").toLowerCase();
+    const categoria = produto.getAttribute("data-category");
+
+    const correspondePesquisa =
+      nome.includes(texto) ||
+      categoria.toLowerCase().includes(texto);
+
+    const correspondeCategoria =
+      categoriaAtual === "Todos" ||
+      categoria === categoriaAtual;
+
+    if (correspondePesquisa && correspondeCategoria) {
+      produto.style.display = "block";
+      encontrados++;
+    } else {
+      produto.style.display = "none";
+    }
+  });
+
+  document.getElementById("noResults").style.display =
+    encontrados === 0 ? "block" : "none";
+}
+
+function filtrar(categoria) {
+  categoriaAtual = categoria;
+  document.getElementById("search").value = "";
+
+  const produtos = document.querySelectorAll(".product");
+  let encontrados = 0;
+
+  produtos.forEach(function(produto) {
+    const categoriaProduto =
+      produto.getAttribute("data-category");
+
+    if (
+      categoria === "Todos" ||
+      categoriaProduto === categoria
+    ) {
+      produto.style.display = "block";
+      encontrados++;
+    } else {
+      produto.style.display = "none";
+    }
+  });
+
+  document.getElementById("noResults").style.display =
+    encontrados === 0 ? "block" : "none";
+}
+
+
+/* PUBLICAR ANÚNCIO NO SUPABASE */
+
+async function anunciar() {
+
+  const nome = document.getElementById("nomeProduto").value.trim();
+  const categoria = document.getElementById("categoriaProduto").value;
+  const precoTexto = document.getElementById("precoProduto").value.trim();
+  const local = document.getElementById("localProduto").value.trim();
+  const descricao = document.getElementById("descricaoProduto").value.trim();
+
+  if (!nome || !precoTexto || !local) {
+    alert("Preenche o nome, preço e localização.");
+    return;
+  }
+
+  const preco = Number(
+    precoTexto.replace(/\./g, "").replace(",", ".")
+  );
+
+  if (isNaN(preco)) {
+    alert("O preço deve conter apenas números.");
+    return;
+  }
+
+  try {
+
+    const resposta = await fetch(
+      SUPABASE_URL + "/rest/v1/anuncios",
+      {
+        method: "POST",
+
+        headers: {
+          "Content-Type": "application/json",
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY,
+          "Prefer": "return=representation"
+        },
+
+        body: JSON.stringify({
+          nome: nome,
+          categoria: categoria,
+          preco: preco,
+          dinheiro: "Kz",
+          mensagem: descricao,
+          nome_vendedor: "Vendedor"
+        })
+      }
+    );
+
+    if (!resposta.ok) {
+      const erro = await resposta.text();
+      console.error(erro);
+      alert("Não foi possível publicar o anúncio.");
+      return;
+    }
+
+    alert("✅ Anúncio publicado com sucesso!");
+
+    document.getElementById("nomeProduto").value = "";
+    document.getElementById("precoProduto").value = "";
+    document.getElementById("localProduto").value = "";
+    document.getElementById("descricaoProduto").value = "";
+
+    carregarAnuncios();
+
+  } catch (erro) {
+    console.error(erro);
+    alert("Erro de ligação com o Supabase.");
+  }
+}
+
+
+/* CARREGAR ANÚNCIOS DO SUPABASE */
+
+async function carregarAnuncios() {
+
+  try {
+
+    const resposta = await fetch(
+      SUPABASE_URL + "/rest/v1/anuncios?select=*",
+      {
+        method: "GET",
+
+        headers: {
+          "apikey": SUPABASE_KEY,
+          "Authorization": "Bearer " + SUPABASE_KEY
+        }
+      }
+    );
+
+    if (!resposta.ok) {
+      console.error(
+        "Erro ao carregar anúncios:",
+        await resposta.text()
+      );
+      return;
+    }
+
+    const anuncios = await resposta.json();
+
+    console.log("Anúncios do Supabase:", anuncios);
+
+    anuncios.forEach(function(anuncio) {
+
+      const produtos =
+        document.getElementById("products");
+
+      const produto =
+        document.createElement("div");
+
+      produto.className = "product";
+
+      produto.setAttribute(
+        "data-category",
+        anuncio.categoria || "Diversos"
+      );
+
+      produto.setAttribute(
+        "data-name",
+        anuncio.nome || "Produto"
+      );
+
+      const preco =
+        anuncio.preco !== null &&
+        anuncio.preco !== undefined
+          ? Number(anuncio.preco).toLocaleString("pt-AO")
+          : "Preço sob consulta";
+
+      produto.innerHTML = `
+        <div class="product-image">📦</div>
+
+        <div class="product-content">
+
+          <h3>${escaparHTML(anuncio.nome || "Produto")}</h3>
+
+          <div class="price">
+            ${preco === "Preço sob consulta"
+              ? preco
+              : "Kz " + preco}
+          </div>
+
+          <div class="category">
+            ${escaparHTML(anuncio.categoria || "Diversos")}
+          </div>
+
+          <div class="location">
+            📍 Angola
+          </div>
+
+          <div>
+            ${escaparHTML(anuncio.mensagem || "")}
+          </div>
+
+        </div>
+      `;
+
+      produtos.appendChild(produto);
+    });
+
+  } catch (erro) {
+    console.error("Erro:", erro);
+  }
+}
+
+
+/* PROTEÇÃO DO TEXTO DOS ANÚNCIOS */
+
+function escaparHTML(texto) {
+
+  return String(texto)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+
+}
+
+
+/* INICIAR */
+
+carregarAnuncios();
+
+</script>
+
+Importante: no formulário atual do teu site, "local" existe, mas a tabela que criámos não tem uma coluna "local". Por isso, nesta primeira ligação ele não é enviado para o Supabase. Também não inventei uma coluna nova para não alterar novamente a tua tabela.
+
+Depois de colocar este código, basta preencher:
+
+COLOCA_AQUI_O_PROJECT_URL
+
+com o teu Project URL, e:
+
+COLOCA_AQUI_A_PUBLISHABLE_KEY
+
+com a tua Publishable key.
+
+Não uses a "secret/service_role key".
