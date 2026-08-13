@@ -1,337 +1,515 @@
 <!DOCTYPE html>
 <html lang="pt">
 <head>
-  <meta charset="UTF-8">
-  <meta name="viewport" content="width=device-width, initial-scale=1.0">
-  <title>Kamba Market</title>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
 
-  <style>
-    body {
-      margin: 0;
-      font-family: Arial, sans-serif;
-      background: #f5f5f5;
-    }
+<title>Kamba Market - Compra e Venda</title>
 
-    header {
-      background: #087f3e;
-      color: white;
-      text-align: center;
-      padding: 22px;
-    }
+<style>
+* {
+  box-sizing: border-box;
+}
 
-    header h1 {
-      margin: 0;
-      font-size: 32px;
-    }
+body {
+  margin: 0;
+  font-family: Arial, sans-serif;
+  background: #f4f4f4;
+  color: #222;
+}
 
-    .cart-button {
-      margin-top: 10px;
-      background: white;
-      color: #087f3e;
-      padding: 10px 18px;
-      border-radius: 8px;
-      border: none;
-      font-weight: bold;
-      cursor: pointer;
-    }
+header {
+  background: #087f3e;
+  color: white;
+  padding: 18px;
+  text-align: center;
+}
 
-    .container {
-      max-width: 1000px;
-      margin: auto;
-      padding: 20px;
-    }
+header h1 {
+  margin: 0;
+  font-size: 30px;
+}
 
-    .search {
-      width: 100%;
-      padding: 15px;
-      box-sizing: border-box;
-      border: 1px solid #ddd;
-      border-radius: 8px;
-      font-size: 16px;
-      margin-bottom: 20px;
-    }
+header p {
+  margin: 7px 0 0;
+}
 
-    .products {
-      display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
-      gap: 20px;
-    }
+.search-box {
+  background: white;
+  padding: 15px;
+  position: sticky;
+  top: 0;
+  z-index: 10;
+  box-shadow: 0 2px 5px #ccc;
+}
 
-    .product {
-      background: white;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+.search-box input {
+  width: 100%;
+  padding: 14px;
+  border: 1px solid #ccc;
+  border-radius: 8px;
+  font-size: 16px;
+}
 
-    .product h2 {
-      color: #087f3e;
-    }
+.categories {
+  display: flex;
+  gap: 8px;
+  padding: 12px;
+  overflow-x: auto;
+  background: white;
+}
 
-    .price {
-      font-size: 20px;
-      font-weight: bold;
-      margin: 15px 0;
-    }
+.categories button {
+  border: none;
+  background: #087f3e;
+  color: white;
+  padding: 10px 15px;
+  border-radius: 20px;
+  white-space: nowrap;
+  cursor: pointer;
+}
 
-    .buy {
-      width: 100%;
-      padding: 12px;
-      border: 0;
-      border-radius: 7px;
-      background: #087f3e;
-      color: white;
-      font-size: 16px;
-      cursor: pointer;
-    }
+.categories button:hover {
+  background: #055c2d;
+}
 
-    .cart {
-      background: white;
-      margin-top: 30px;
-      padding: 20px;
-      border-radius: 10px;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.1);
-    }
+.container {
+  max-width: 1100px;
+  margin: auto;
+  padding: 15px;
+}
 
-    .cart-item {
-      display: flex;
-      justify-content: space-between;
-      border-bottom: 1px solid #ddd;
-      padding: 12px 0;
-    }
+.title {
+  margin-top: 10px;
+}
 
-    .remove {
-      background: #d62828;
-      color: white;
-      border: none;
-      padding: 6px 10px;
-      border-radius: 5px;
-      cursor: pointer;
-    }
+.products {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 18px;
+}
 
-    .checkout {
-      width: 100%;
-      padding: 14px;
-      margin-top: 15px;
-      background: #25D366;
-      color: white;
-      border: none;
-      border-radius: 7px;
-      font-size: 17px;
-      font-weight: bold;
-      cursor: pointer;
-    }
+.product {
+  background: white;
+  border-radius: 12px;
+  overflow: hidden;
+  box-shadow: 0 2px 8px #ccc;
+}
 
-    footer {
-      margin-top: 40px;
-      padding: 20px;
-      text-align: center;
-      background: #222;
-      color: white;
-    }
-  </style>
+.product-image {
+  height: 170px;
+  background: #ddd;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 55px;
+}
+
+.product-content {
+  padding: 15px;
+}
+
+.product h3 {
+  margin: 0 0 8px;
+}
+
+.price {
+  color: #087f3e;
+  font-weight: bold;
+  font-size: 19px;
+}
+
+.category {
+  color: #777;
+  font-size: 13px;
+}
+
+.location {
+  color: #555;
+  font-size: 14px;
+  margin: 8px 0;
+}
+
+.contact {
+  display: block;
+  text-align: center;
+  background: #087f3e;
+  color: white;
+  padding: 11px;
+  border-radius: 7px;
+  text-decoration: none;
+  margin-top: 10px;
+}
+
+.contact:hover {
+  background: #055c2d;
+}
+
+.no-results {
+  text-align: center;
+  padding: 40px;
+  display: none;
+}
+
+.sell {
+  margin-top: 30px;
+  background: white;
+  padding: 20px;
+  border-radius: 12px;
+  box-shadow: 0 2px 8px #ccc;
+}
+
+.sell input,
+.sell select,
+.sell textarea {
+  width: 100%;
+  padding: 12px;
+  margin: 7px 0;
+  border: 1px solid #ccc;
+  border-radius: 7px;
+}
+
+.sell button {
+  width: 100%;
+  padding: 13px;
+  border: none;
+  border-radius: 7px;
+  background: #087f3e;
+  color: white;
+  font-size: 16px;
+}
+
+footer {
+  background: #222;
+  color: white;
+  text-align: center;
+  padding: 25px;
+  margin-top: 35px;
+}
+</style>
 </head>
 
 <body>
 
 <header>
-  <h1>🛍️ Kamba Market</h1>
-  <p>O teu mercado online</p>
-
-  <button class="cart-button" onclick="mostrarCarrinho()">
-    🛒 Carrinho (<span id="quantidade">0</span>)
-  </button>
+  <h1>🛒 KAMBA MARKET</h1>
+  <p>Compra e venda de produtos em Angola</p>
 </header>
+
+<div class="search-box">
+  <input
+    type="text"
+    id="search"
+    placeholder="🔎 Pesquisar carros, ouro, animais, casas, telefones..."
+    onkeyup="pesquisar()"
+  >
+</div>
+
+<div class="categories">
+  <button onclick="filtrar('Todos')">Todos</button>
+  <button onclick="filtrar('Carros')">🚗 Carros</button>
+  <button onclick="filtrar('Ouro')">🥇 Ouro</button>
+  <button onclick="filtrar('Animais')">🐄 Animais</button>
+  <button onclick="filtrar('Telefones')">📱 Telefones</button>
+  <button onclick="filtrar('Eletrónicos')">💻 Eletrónicos</button>
+  <button onclick="filtrar('Roupas')">👕 Roupas</button>
+  <button onclick="filtrar('Casas')">🏠 Casas</button>
+  <button onclick="filtrar('Terrenos')">🌍 Terrenos</button>
+  <button onclick="filtrar('Diversos')">📦 Diversos</button>
+</div>
 
 <div class="container">
 
-  <input
-    id="pesquisa"
-    class="search"
-    type="text"
-    placeholder="Pesquisar produtos..."
-    onkeyup="pesquisar()"
-  >
+<h2 class="title">Produtos disponíveis</h2>
 
-  <div class="products">
+<div class="products" id="products">
 
-    <div class="product">
-      <h2>📱 Telemóvel</h2>
-      <p>Smartphones de qualidade.</p>
-      <div class="price">150.000 Kz</div>
-      <button class="buy" onclick="adicionar('Telemóvel', 150000)">
-        Adicionar ao carrinho
-      </button>
-    </div>
-
-    <div class="product">
-      <h2>👕 Roupa</h2>
-      <p>Roupas modernas para todos.</p>
-      <div class="price">25.000 Kz</div>
-      <button class="buy" onclick="adicionar('Roupa', 25000)">
-        Adicionar ao carrinho
-      </button>
-    </div>
-
-    <div class="product">
-      <h2>👟 Calçado</h2>
-      <p>Calçados de qualidade.</p>
-      <div class="price">35.000 Kz</div>
-      <button class="buy" onclick="adicionar('Calçado', 35000)">
-        Adicionar ao carrinho
-      </button>
-    </div>
-
-    <div class="product">
-      <h2>💻 Computador</h2>
-      <p>Computadores para estudo e trabalho.</p>
-      <div class="price">250.000 Kz</div>
-      <button class="buy" onclick="adicionar('Computador', 250000)">
-        Adicionar ao carrinho
-      </button>
-    </div>
-
+<!-- CARROS -->
+<div class="product" data-category="Carros" data-name="Toyota Hilux">
+  <div class="product-image">🚙</div>
+  <div class="product-content">
+    <h3>Toyota Hilux</h3>
+    <div class="price">Kz 18.000.000</div>
+    <div class="category">Carros</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
   </div>
+</div>
 
-  <div id="carrinho" class="cart" style="display:none;">
-    <h2>🛒 Meu Carrinho</h2>
-
-    <div id="lista"></div>
-
-    <h3>Total: <span id="total">0</span> Kz</h3>
-
-    <button class="checkout" onclick="finalizarCompra()">
-      Finalizar pedido pelo WhatsApp
-    </button>
+<div class="product" data-category="Carros" data-name="Toyota Land Cruiser">
+  <div class="product-image">🚘</div>
+  <div class="product-content">
+    <h3>Toyota Land Cruiser</h3>
+    <div class="price">Kz 25.000.000</div>
+    <div class="category">Carros</div>
+    <div class="location">📍 Benguela</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
   </div>
+</div>
+
+<!-- OURO -->
+<div class="product" data-category="Ouro" data-name="Ouro 24 quilates">
+  <div class="product-image">🥇</div>
+  <div class="product-content">
+    <h3>Ouro 24 Quilates</h3>
+    <div class="price">Preço sob consulta</div>
+    <div class="category">Ouro</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- ANIMAIS -->
+<div class="product" data-category="Animais" data-name="Gado bovino">
+  <div class="product-image">🐄</div>
+  <div class="product-content">
+    <h3>Gado Bovino</h3>
+    <div class="price">Kz 450.000</div>
+    <div class="category">Animais</div>
+    <div class="location">📍 Huambo</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<div class="product" data-category="Animais" data-name="Cabras">
+  <div class="product-image">🐐</div>
+  <div class="product-content">
+    <h3>Cabras</h3>
+    <div class="price">Kz 80.000</div>
+    <div class="category">Animais</div>
+    <div class="location">📍 Benguela</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- TELEFONES -->
+<div class="product" data-category="Telefones" data-name="iPhone">
+  <div class="product-image">📱</div>
+  <div class="product-content">
+    <h3>iPhone</h3>
+    <div class="price">Kz 650.000</div>
+    <div class="category">Telefones</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<div class="product" data-category="Telefones" data-name="Samsung Galaxy">
+  <div class="product-image">📱</div>
+  <div class="product-content">
+    <h3>Samsung Galaxy</h3>
+    <div class="price">Kz 450.000</div>
+    <div class="category">Telefones</div>
+    <div class="location">📍 Cabinda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- ELETRÓNICOS -->
+<div class="product" data-category="Eletrónicos" data-name="Computador portátil">
+  <div class="product-image">💻</div>
+  <div class="product-content">
+    <h3>Computador Portátil</h3>
+    <div class="price">Kz 500.000</div>
+    <div class="category">Eletrónicos</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- ROUPAS -->
+<div class="product" data-category="Roupas" data-name="Roupas masculinas">
+  <div class="product-image">👕</div>
+  <div class="product-content">
+    <h3>Roupas Masculinas</h3>
+    <div class="price">Kz 25.000</div>
+    <div class="category">Roupas</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- CASAS -->
+<div class="product" data-category="Casas" data-name="Casa T3">
+  <div class="product-image">🏠</div>
+  <div class="product-content">
+    <h3>Casa T3</h3>
+    <div class="price">Kz 35.000.000</div>
+    <div class="category">Casas</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- TERRENOS -->
+<div class="product" data-category="Terrenos" data-name="Terreno">
+  <div class="product-image">🌍</div>
+  <div class="product-content">
+    <h3>Terreno</h3>
+    <div class="price">Kz 5.000.000</div>
+    <div class="category">Terrenos</div>
+    <div class="location">📍 Viana</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+<!-- DIVERSOS -->
+<div class="product" data-category="Diversos" data-name="Móveis">
+  <div class="product-image">🛋️</div>
+  <div class="product-content">
+    <h3>Móveis</h3>
+    <div class="price">Kz 150.000</div>
+    <div class="category">Diversos</div>
+    <div class="location">📍 Luanda</div>
+    <a class="contact" href="https://wa.me/244900000000">Contactar vendedor</a>
+  </div>
+</div>
+
+</div>
+
+<div class="no-results" id="noResults">
+  <h2>😕 Nenhum produto encontrado</h2>
+  <p>Tenta pesquisar por outro nome ou categoria.</p>
+</div>
+
+<div class="sell">
+
+<h2>📢 Anunciar produto</h2>
+
+<p>Queres vender alguma coisa? Preenche os dados abaixo.</p>
+
+<input type="text" id="nomeProduto" placeholder="Nome do produto">
+
+<select id="categoriaProduto">
+  <option>Carros</option>
+  <option>Ouro</option>
+  <option>Animais</option>
+  <option>Telefones</option>
+  <option>Eletrónicos</option>
+  <option>Roupas</option>
+  <option>Casas</option>
+  <option>Terrenos</option>
+  <option>Diversos</option>
+</select>
+
+<input type="text" id="precoProduto" placeholder="Preço em Kz">
+
+<input type="text" id="localProduto" placeholder="Localização">
+
+<textarea id="descricaoProduto" placeholder="Descrição do produto"></textarea>
+
+<button onclick="anunciar()">Publicar anúncio</button>
+
+</div>
 
 </div>
 
 <footer>
+  <h3>KAMBA MARKET</h3>
+  <p>O teu mercado online em Angola 🇦🇴</p>
   <p>© 2026 Kamba Market</p>
-  <p>Comprar e vender de forma simples.</p>
 </footer>
 
 <script>
-let carrinho = [];
 
-function adicionar(nome, preco) {
-  carrinho.push({
-    nome: nome,
-    preco: preco
-  });
-
-  atualizarCarrinho();
-
-  alert(nome + " foi adicionado ao carrinho!");
-}
-
-function atualizarCarrinho() {
-
-  document.getElementById("quantidade").innerText = carrinho.length;
-
-  let lista = document.getElementById("lista");
-  let total = 0;
-
-  lista.innerHTML = "";
-
-  carrinho.forEach(function(item, index) {
-
-    total += item.preco;
-
-    lista.innerHTML += `
-      <div class="cart-item">
-        <span>
-          ${item.nome} - ${item.preco.toLocaleString("pt-AO")} Kz
-        </span>
-
-        <button class="remove" onclick="remover(${index})">
-          Remover
-        </button>
-      </div>
-    `;
-  });
-
-  document.getElementById("total").innerText =
-    total.toLocaleString("pt-AO");
-}
-
-function remover(index) {
-  carrinho.splice(index, 1);
-  atualizarCarrinho();
-}
-
-function mostrarCarrinho() {
-
-  const carrinhoDiv = document.getElementById("carrinho");
-
-  if (carrinhoDiv.style.display === "none") {
-    carrinhoDiv.style.display = "block";
-  } else {
-    carrinhoDiv.style.display = "none";
-  }
-
-  atualizarCarrinho();
-}
+let categoriaAtual = "Todos";
 
 function pesquisar() {
 
   const texto = document
-    .getElementById("pesquisa")
+    .getElementById("search")
     .value
     .toLowerCase();
 
   const produtos = document.querySelectorAll(".product");
 
+  let encontrados = 0;
+
   produtos.forEach(function(produto) {
 
-    produto.style.display =
-      produto.innerText.toLowerCase().includes(texto)
-      ? "block"
-      : "none";
+    const nome = produto
+      .getAttribute("data-name")
+      .toLowerCase();
+
+    const categoria = produto
+      .getAttribute("data-category");
+
+    const correspondePesquisa =
+      nome.includes(texto) ||
+      categoria.toLowerCase().includes(texto);
+
+    const correspondeCategoria =
+      categoriaAtual === "Todos" ||
+      categoria === categoriaAtual;
+
+    if (correspondePesquisa && correspondeCategoria) {
+      produto.style.display = "block";
+      encontrados++;
+    } else {
+      produto.style.display = "none";
+    }
 
   });
+
+  document.getElementById("noResults").style.display =
+    encontrados === 0 ? "block" : "none";
 }
 
-function finalizarCompra() {
+function filtrar(categoria) {
 
-  if (carrinho.length === 0) {
-    alert("O carrinho está vazio.");
+  categoriaAtual = categoria;
+
+  document.getElementById("search").value = "";
+
+  const produtos = document.querySelectorAll(".product");
+
+  let encontrados = 0;
+
+  produtos.forEach(function(produto) {
+
+    const categoriaProduto =
+      produto.getAttribute("data-category");
+
+    if (
+      categoria === "Todos" ||
+      categoriaProduto === categoria
+    ) {
+      produto.style.display = "block";
+      encontrados++;
+    } else {
+      produto.style.display = "none";
+    }
+
+  });
+
+  document.getElementById("noResults").style.display =
+    encontrados === 0 ? "block" : "none";
+}
+
+function anunciar() {
+
+  const nome = document.getElementById("nomeProduto").value;
+  const categoria = document.getElementById("categoriaProduto").value;
+  const preco = document.getElementById("precoProduto").value;
+  const local = document.getElementById("localProduto").value;
+  const descricao = document.getElementById("descricaoProduto").value;
+
+  if (!nome || !preco || !local) {
+    alert("Preenche o nome, preço e localização.");
     return;
   }
 
-  let mensagem = "Olá, Kamba Market! Gostaria de fazer este pedido:%0A%0A";
-
-  let total = 0;
-
-  carrinho.forEach(function(item) {
-
-    mensagem +=
-      "- " + item.nome + ": " +
-      item.preco.toLocaleString("pt-AO") +
-      " Kz%0A";
-
-    total += item.preco;
-  });
-
-  mensagem +=
-    "%0ATotal: " +
-    total.toLocaleString("pt-AO") +
-    " Kz";
-
-  /*
-   * IMPORTANTE:
-   * Substitua 244900000000 pelo número de WhatsApp
-   * que será usado pela Kamba Market.
-   */
-
-  const numero = "244900000000";
-
-  window.open(
-    "https://wa.me/" + numero + "?text=" + mensagem,
-    "_blank"
+  alert(
+    "Anúncio preparado!\n\n" +
+    "Produto: " + nome + "\n" +
+    "Categoria: " + categoria + "\n" +
+    "Preço: " + preco + " Kz\n" +
+    "Local: " + local + "\n\n" +
+    descricao
   );
+
 }
+
 </script>
 
 </body>
