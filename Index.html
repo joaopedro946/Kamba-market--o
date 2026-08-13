@@ -516,11 +516,7 @@ function anunciar() {
 </html>
 Substitui o teu "index.html" pelo código que te vou preparar. Mantém os teus dados do Supabase apenas nestas duas linhas:
 
-const SUPABASE_URL = "COLOCA_AQUI_O_PROJECT_URL";
-const SUPABASE_KEY = "COLOCA_AQUI_A_PUBLISHABLE_KEY";
-
-No teu código atual, a parte final do "<script>" deve ser substituída por esta:
-
+con "<script>" deve ser substituída 
 <script>
 
 const SUPABASE_URL = "COLOCA_AQUI_O_PROJECT_URL";
@@ -652,13 +648,7 @@ async function anunciar() {
   } catch (erro) {
     console.error(erro);
     alert("Erro de ligação com o Supabase.");
-  }
-}
 
-
-/* CARREGAR ANÚNCIOS DO SUPABASE */
-
-async function carregarAnuncios() {
 
   try {
 
